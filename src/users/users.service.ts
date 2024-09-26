@@ -7,9 +7,10 @@ import {
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './models/user.model';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthService } from '../auth/auth.service';
+import { RegistrationRequestDto } from './dto/registration-request.dto';
+import { AuthenticationRequestDto } from './dto/authentication-request.dto';
 
 @Injectable()
 export class UsersService {
@@ -18,8 +19,8 @@ export class UsersService {
     @Inject(forwardRef(() => AuthService)) private authService: AuthService,
   ) {}
 
-  async register(createUser: CreateUserDto) {
-    const { email, password } = createUser;
+  async register(registrationRequestDto: RegistrationRequestDto) {
+    const { email, password } = registrationRequestDto;
 
     // check if user with email already exists
     const existingUser = await this.findByEmail(email);
@@ -29,7 +30,7 @@ export class UsersService {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await this.UserModel.create({
-      email,
+      ...registrationRequestDto,
       password: hashedPassword,
     });
     return { message: 'User registered successfully', userId: user.id };
@@ -60,8 +61,8 @@ export class UsersService {
     await user.destroy();
   }
 
-  async login(createUser: CreateUserDto) {
-    const { email, password } = createUser;
+  async login(authenticationRequestDto: AuthenticationRequestDto) {
+    const { email, password } = authenticationRequestDto;
 
     // validate user credentials
     const user = await this.authService.validateUser(email, password);

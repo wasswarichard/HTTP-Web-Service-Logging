@@ -1,7 +1,7 @@
 export type LogLevel = 'info' | 'warn' | 'error';
 
 export class LogMessage {
-  timestamp: Date;
+  timestamp: string;
   level: LogLevel;
   text: string;
 }
