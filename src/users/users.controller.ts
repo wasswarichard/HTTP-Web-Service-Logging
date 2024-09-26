@@ -9,17 +9,20 @@ import {
   Get,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './models/user.model';
+import { RegistrationRequestDto } from './dto/registration-request.dto';
+import { AuthenticationRequestDto } from './dto/authentication-request.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post('register')
-  register(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
-    return this.usersService.register(createUserDto);
+  register(
+    @Body(new ValidationPipe()) registrationRequestDto: RegistrationRequestDto,
+  ) {
+    return this.usersService.register(registrationRequestDto);
   }
 
   @Get()
@@ -46,7 +49,7 @@ export class UsersController {
   }
 
   @Post('login')
-  login(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.login(createUserDto);
+  login(@Body() authenticationRequestDto: AuthenticationRequestDto) {
+    return this.usersService.login(authenticationRequestDto);
   }
 }
