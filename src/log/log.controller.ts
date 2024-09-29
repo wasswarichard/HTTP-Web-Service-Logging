@@ -34,7 +34,7 @@ export class LogController {
   @Roles(RoleTypeEnum.ADMIN)
   @Post('report')
   async generateReport(
-    @Body() reportRequest: ReportingRequest,
+    @Body(new ValidationPipe()) reportRequest: ReportingRequest,
   ): Promise<ReportingResponse> {
     const { startDate, endDate } = reportRequest;
     return this.logService.generateReport(startDate, endDate);
