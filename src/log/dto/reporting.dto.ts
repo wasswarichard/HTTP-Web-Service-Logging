@@ -6,6 +6,7 @@ export class ReportingRequest {
 export class ReportingResponse {
   startDate?: string;
   endDate?: string;
+  infoCount: number;
   warningCount: number;
   errorCount: number;
   messageWithUrlCount: number;

@@ -7,12 +7,15 @@ import {
   ValidationPipe,
   Delete,
   Get,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './models/user.model';
 import { RegistrationRequestDto } from './dto/registration-request.dto';
-import { AuthenticationRequestDto } from './dto/authentication-request.dto';
+import { LocalAuthGuard } from '../auth/guards/local-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -25,6 +28,7 @@ export class UsersController {
     return this.usersService.register(registrationRequestDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll(): Promise<User[]> {
     return this.usersService.findAll();
@@ -48,8 +52,9 @@ export class UsersController {
     return this.usersService.remove(+id);
   }
 
+  @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@Body() authenticationRequestDto: AuthenticationRequestDto) {
-    return this.usersService.login(authenticationRequestDto);
+  login(@Request() req) {
+    return this.usersService.login(req.user);
   }
 }

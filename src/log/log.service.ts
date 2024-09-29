@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { LogMessage } from './dto/log.dto';
+import { SendLogRequest } from './dto/log.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Log } from './models/log.model';
 import { ReportingResponse } from './dto/reporting.dto';
@@ -9,7 +9,7 @@ import { Op } from 'sequelize';
 export class LogService {
   constructor(@InjectModel(Log) private logModel: typeof Log) {}
 
-  async storeLogs(userId: number, logMessages: LogMessage[]) {
+  async storeLogs(userId: number, logMessages: SendLogRequest): Promise<Log[]> {
     return await Promise.all(
       logMessages.map(async (logMessage) => {
         const containsLocalhostUrls = /http:\/\/localhost/.test(
@@ -41,6 +41,15 @@ export class LogService {
         [Op.lte]: new Date(endDate),
       };
     }
+
+    // Count the info logs in the period
+    const infoCount = await this.logModel.count({
+      where: {
+        ...whereClause,
+        level: 'info',
+      },
+    });
+
     // Count the warning logs in the period
     const warningCount = await this.logModel.count({
       where: {
@@ -68,6 +77,7 @@ export class LogService {
     return {
       startDate,
       endDate,
+      infoCount,
       warningCount,
       errorCount,
       messageWithUrlCount,

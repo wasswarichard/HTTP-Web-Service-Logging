@@ -3,6 +3,7 @@ import {
   forwardRef,
   Inject,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './models/user.model';
@@ -37,7 +38,14 @@ export class UsersService {
   }
 
   async findByEmail(email: string): Promise<User> {
-    return this.UserModel.findOne({ where: { email } });
+    try {
+      return await this.UserModel.findOne({
+        where: { email },
+        raw: true,
+      });
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
   findAll(): Promise<User[]> {
@@ -62,13 +70,6 @@ export class UsersService {
   }
 
   async login(authenticationRequestDto: AuthenticationRequestDto) {
-    const { email, password } = authenticationRequestDto;
-
-    // validate user credentials
-    const user = await this.authService.validateUser(email, password);
-    if (!user) {
-      throw new BadRequestException(`Invalid credentials`);
-    }
-    return this.authService.login(user);
+    return this.authService.login(authenticationRequestDto);
   }
 }
