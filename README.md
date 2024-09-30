@@ -52,7 +52,45 @@ Backend:
 The application exposes the following endpoints:
 
 - `POST /users/register`: Register a new user.
+### Request
+```bash
+{
+    "email": "johndoe@gmail.com",
+    "password": "test1234567",
+    "role": "ADMIN" //optional enum value (ADMIN, USER)
+}
+```
+### Response
+```bash
+{
+    "message": "User registered successfully",
+    "userId": 5
+}
+```
 - `POST /users/login`: Authenticate a user and return access token.
+#### Request
+```bash
+{
+    "email": "johndoe@gmail.com",
+    "password": "test1234567",
+
+}
+```
+#### Response 
+```bash
+{
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5kb2VAZ21haWwuY29tIiwic3ViIjo0LCJpYXQiOjE3Mjc2OTQ1ODh9.c4n0TX77zAj2Svohy3RRho9rEnTzlYKzRzz__YQeEQM"
+}
+```
 - `GET /logs`: Returns a list of the logs.
+### Response
+```bash
+{
+    "infoCount": 11,
+    "warningCount": 0,
+    "errorCount": 0,
+    "messageWithUrlCount": 0
+}
+- ```
 ## License
 This project uses the following license: [MIT License](<link>).
