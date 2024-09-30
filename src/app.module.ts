@@ -11,7 +11,7 @@ import { LogModule } from './log/log.module';
   imports: [
     SequelizeModule.forRoot({
       dialect: 'postgres',
-      host: 'localhost',
+      host: process.env.DATABASE_HOST,
       port: parseInt(<string>process.env.DATABASE_PORT),
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,

@@ -53,7 +53,11 @@ export class UsersService {
   }
 
   findOne(id: number): Promise<User> {
-    return this.UserModel.findOne({ where: { id }, raw: true });
+    try {
+      return this.UserModel.findOne({ where: { id }, raw: true });
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User[]> {

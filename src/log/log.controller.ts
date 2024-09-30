@@ -7,7 +7,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { LogService } from './log.service';
-import { LogMessageDto, SendLogRequestDto } from './dto/log.dto';
+import { SendLogRequestDto } from './dto/log.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ReportingRequest, ReportingResponse } from './dto/reporting.dto';
 import { RolesGuard } from '../auth/guards/roles.guard';

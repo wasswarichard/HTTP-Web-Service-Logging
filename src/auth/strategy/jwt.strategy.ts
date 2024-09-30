@@ -1,5 +1,5 @@
 import 'dotenv-defaults/config';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { User } from '../../users/models/user.model';
@@ -17,6 +17,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: any): Promise<Partial<User>> {
     const user = await this.userService.findOne(payload.sub);
+    if (!user) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
     return {
       id: payload.sub,
       email: payload.email,

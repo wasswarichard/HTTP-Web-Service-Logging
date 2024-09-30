@@ -1,7 +1,7 @@
 import {
   forwardRef,
   Inject,
-  Injectable,
+  Injectable, NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
@@ -23,7 +23,7 @@ export class AuthService {
       return result;
     }
 
-    throw new UnauthorizedException(`Invalid email or password`);
+    throw new NotFoundException(`user not found with: ${email}`);
   }
 
   async login(user: any) {

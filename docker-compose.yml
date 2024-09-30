@@ -1,24 +1,35 @@
 version: '3.8'
 services:
   backend:
-    build: ./
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webservice-app
+    restart: always
     ports:
-      - '3001:3000'
+      - '3000:3000'
     environment:
-      DATABASE_HOST: db
-      DATABASE_PORT: 5432
-      DATABASE_USERNAME: postgres
-      DATABASE_PASSWORD: example
-      DATABASE_NAME: webservice
-      JWT_SECRET: secret
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_NAME: ${DATABASE_NAME}
+      JWT_SECRET: ${JWT_SECRET}
     depends_on:
-      - db
+      - postgres
 
-  db:
-    image: postgres:13
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    restart: always
     environment:
-      POSTGRES_DB: webservice
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: example
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
     ports:
       - '5432:5432'
+
+volumes:
+  postgres-data:
