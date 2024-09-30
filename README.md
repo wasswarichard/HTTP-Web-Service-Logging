@@ -16,7 +16,7 @@
 
 Clone the repository
 ```bash
-git clone https://github.com/wasswarichard/HTTP-Web-Service-Logging.git
+git clone https://github.com/wasswarichard/Web-Service-Logging.git
 ```
 cd into the repository
 ```bash

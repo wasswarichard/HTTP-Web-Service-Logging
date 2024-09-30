@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { SendLogRequest } from './dto/log.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Log } from './models/log.model';
@@ -14,6 +14,24 @@ export class LogService {
   ) {}
 
   async storeLogs(userId: number, logMessages: SendLogRequest): Promise<Log[]> {
+    const MAX_LOG_SIZE = 100 * 1024; // 100 KB per log message
+    const MAX_TOTAL_SIZE = 5 * 1024 * 1024; // 5 MB total
+
+    // Use reduce to calculate total size and validate each log size
+    const totalSize = logMessages.reduce((acc, log) => {
+      const logSize = Buffer.byteLength(log.text, 'utf-8');
+      if (logSize > MAX_LOG_SIZE) {
+        throw new BadRequestException(
+          `Log message exceeds the maximum size of 100 KB.`,
+        );
+      }
+      return acc + logSize;
+    }, 0);
+
+    if (totalSize > MAX_TOTAL_SIZE) {
+      throw new BadRequestException('Total log size exceeds the 5 MB limit');
+    }
+
     return await Promise.all(
       logMessages.map(async (logMessage) => {
         const containsLocalhostUrls = /http:\/\/localhost/.test(
