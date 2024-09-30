@@ -1,73 +1,58 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Web Service
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Libraries/Frameworks used
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- **Backend** : Nestjs, TypeScript, Sequelize, Jest, SuperTest, Postgres
 
-## Description
+## Design decisions
+### Backend
+- API Design : The API is implemented [Nestjs](https://nestjs.com/). It supports offset-limit based pagination for the list of candidates.
+- Testing : All the Rest operations are tested using integration test cases using Jest and SuperTest.
+- Linting & Formatting : The codebase is linted using ESLint and formatted using Prettier.
+- Deployment : The Nestjs nodejs server can be dockerized and deployed in container orchestration platforms like Kubernetes or AWS EKS, ECS or Fargate.
+- Logging & Monitoring : The application logs and metrics stored in postgres database. The logs are subscribed too using nestjs Event Emitter library.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## To run locally
 
-## Installation
-
+Clone the repository
 ```bash
-$ npm install
+git clone https://github.com/wasswarichard/HTTP-Web-Service-Logging.git
+```
+cd into the repository
+```bash
+cd HTTP-Web-Service-Logging
+```
+create a .env file and update the environment variables
+```bash
+DATABASE_HOST=
+DATABASE_PORT=
+DATABASE_USERNAME=
+DATABASE_PASSWORD=
+DATABASE_NAME=
+JWT_SECRET=
+```
+Inside the repository run
+```bash
+docker-compose up --build
 ```
 
-## Running the app
-
+The Backend server will start on
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+http://localhost:3000
 ```
 
-## Test
+## Test cases snapshot
 
-```bash
-# unit tests
-$ npm run test
+Backend:
 
-# e2e tests
-$ npm run test:e2e
+![Snapshot of backend cases](./docs/e2e_testcases.png)
 
-# test coverage
-$ npm run test:cov
-```
+## API Endpoints
 
-## Support
+The application exposes the following endpoints:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
+- `POST /users/register`: Register a new user.
+- `POST /users/login`: Authenticate a user and return access token.
+- `GET /logs`: Returns a list of the logs.
 ## License
-
-Nest is [MIT licensed](LICENSE).
+This project uses the following license: [MIT License](<link>).

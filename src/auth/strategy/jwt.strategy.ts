@@ -16,11 +16,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any): Promise<Partial<User>> {
-    const user = await this.userService.findOne(payload.sub);
+    const user = await this.userService.findByEmail(payload.email);
     if (!user) {
       throw new UnauthorizedException('Invalid email or password');
     }
-
     return {
       id: payload.sub,
       email: payload.email,
