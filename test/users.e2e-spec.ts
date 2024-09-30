@@ -16,7 +16,7 @@ describe('Users', () => {
     await app.init();
   });
 
-  let accessToken;
+  let accessToken: string;
 
   it('should create a user', async () => {
     const response = await request(app.getHttpServer())
