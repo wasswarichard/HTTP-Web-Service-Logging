@@ -4,11 +4,11 @@ import { IsDateString, IsEnum, IsOptional, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ValidateNested, ArrayMinSize } from 'class-validator';
 
-export type LogLevel = 'info' | 'warn' | 'error';
+export type LogLevel = 'info' | 'warning' | 'error';
 
 export enum LogLevelEnum {
   info = 'info',
-  warn = 'warn',
+  warning = 'warning',
   error = 'error',
 }
 

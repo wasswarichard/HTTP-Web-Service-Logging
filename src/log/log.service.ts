@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { SendLogRequest } from './dto/log.dto';
+import { LogLevelEnum, SendLogRequest } from './dto/log.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Log } from './models/log.model';
 import { ReportingResponse } from './dto/reporting.dto';
@@ -69,7 +69,7 @@ export class LogService {
     const infoCount = await this.logModel.count({
       where: {
         ...whereClause,
-        level: 'info',
+        level: LogLevelEnum.info,
       },
     });
 
@@ -77,7 +77,7 @@ export class LogService {
     const warningCount = await this.logModel.count({
       where: {
         ...whereClause,
-        level: 'warning',
+        level: LogLevelEnum.warning,
       },
     });
 
@@ -85,7 +85,7 @@ export class LogService {
     const errorCount = await this.logModel.count({
       where: {
         ...whereClause,
-        level: 'error',
+        level: LogLevelEnum.error,
       },
     });
 
