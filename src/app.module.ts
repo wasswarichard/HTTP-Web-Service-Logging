@@ -6,6 +6,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { LogModule } from './log/log.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { LogModule } from './log/log.module';
       synchronize: true,
       logging: false,
     }),
+    EventEmitterModule.forRoot(),
     UsersModule,
     AuthModule,
     LogModule,

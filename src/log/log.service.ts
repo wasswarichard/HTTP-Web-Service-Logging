@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Log } from './models/log.model';
 import { ReportingResponse } from './dto/reporting.dto';
 import { Op } from 'sequelize';
+import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
 export class LogService {
@@ -82,5 +83,10 @@ export class LogService {
       errorCount,
       messageWithUrlCount,
     };
+  }
+
+  @OnEvent('user.events')
+  handleUserEvents({ userId, logs }: { userId: number; logs: SendLogRequest }) {
+    this.storeLogs(userId, logs);
   }
 }

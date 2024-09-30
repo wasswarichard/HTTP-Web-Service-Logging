@@ -7,12 +7,14 @@ import {
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(forwardRef(() => UsersService)) private userService: UsersService,
     private jwtService: JwtService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async validateUser(email: string, password: string) {
@@ -28,6 +30,16 @@ export class AuthService {
 
   async login(user: any) {
     const payload = { email: user.email, sub: user.id };
+    this.eventEmitter.emit('user.events', {
+      userId: user.id,
+      logs: [
+        {
+          timestamp: new Date().toISOString(),
+          level: 'info',
+          text: `User with id ${user.id} has logged in`,
+        },
+      ],
+    });
     return {
       accessToken: this.jwtService.sign(payload, {
         secret: process.env.JWT_SECRET,

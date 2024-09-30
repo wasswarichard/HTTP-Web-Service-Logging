@@ -40,19 +40,23 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string): Promise<User> {
     return this.usersService.findOne(+id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(
     @Param('id') id: string,
     @Body(new ValidationPipe()) updateUserDto: UpdateUserDto,
+    @Request() req,
   ): Promise<User[]> {
-    return this.usersService.update(+id, updateUserDto);
+    return this.usersService.update(+id, updateUserDto, req.user.id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string): Promise<void> {
     return this.usersService.remove(+id);
