@@ -18,6 +18,7 @@ import { LogModule } from './log/log.module';
       database: process.env.DATABASE_NAME,
       autoLoadModels: true,
       synchronize: true,
+      logging: false,
     }),
     UsersModule,
     AuthModule,

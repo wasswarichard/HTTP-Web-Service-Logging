@@ -5,6 +5,7 @@ import {
   Request,
   UseGuards,
   ValidationPipe,
+  Get,
 } from '@nestjs/common';
 import { LogService } from './log.service';
 import { SendLogRequestDto } from './dto/log.dto';
@@ -32,7 +33,7 @@ export class LogController {
   }
 
   @Roles(RoleTypeEnum.ADMIN)
-  @Post('report')
+  @Get('report')
   async generateReport(
     @Body(new ValidationPipe()) reportRequest: ReportingRequest,
   ): Promise<ReportingResponse> {

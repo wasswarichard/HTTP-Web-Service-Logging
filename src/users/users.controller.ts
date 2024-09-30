@@ -28,6 +28,12 @@ export class UsersController {
     return this.usersService.register(registrationRequestDto);
   }
 
+  @UseGuards(LocalAuthGuard)
+  @Post('login')
+  login(@Request() req) {
+    return this.usersService.login(req.user);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get()
   findAll(): Promise<User[]> {
@@ -50,11 +56,5 @@ export class UsersController {
   @Delete(':id')
   remove(@Param('id') id: string): Promise<void> {
     return this.usersService.remove(+id);
-  }
-
-  @UseGuards(LocalAuthGuard)
-  @Post('login')
-  login(@Request() req) {
-    return this.usersService.login(req.user);
   }
 }

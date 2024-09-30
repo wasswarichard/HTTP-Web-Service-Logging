@@ -1,8 +1,8 @@
 import {
   forwardRef,
   Inject,
-  Injectable, NotFoundException,
-  UnauthorizedException,
+  Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';

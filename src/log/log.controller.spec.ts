@@ -1,6 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { LogController } from './log.controller';
 import { LogService } from './log.service';
+import { createMock } from '@golevelup/ts-jest';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { Log } from './models/log.model';
 
 describe('LogController', () => {
   let controller: LogController;
@@ -9,7 +12,10 @@ describe('LogController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [LogController],
       providers: [LogService],
-    }).compile();
+      imports: [SequelizeModule.forFeature([Log])],
+    })
+      .useMocker(createMock)
+      .compile();
 
     controller = module.get<LogController>(LogController);
   });
