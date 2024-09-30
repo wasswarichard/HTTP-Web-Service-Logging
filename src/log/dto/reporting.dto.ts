@@ -1,6 +1,15 @@
+import { IsDateString, IsOptional, IsString } from 'class-validator';
+
 export class ReportingRequest {
-  startDate?: string;
-  endDate?: string;
+  @IsDateString()
+  @IsString()
+  @IsOptional()
+  startDate: string;
+
+  @IsDateString()
+  @IsString()
+  @IsOptional()
+  endDate: string;
 }
 
 export class ReportingResponse {
