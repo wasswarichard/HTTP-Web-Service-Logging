@@ -91,6 +91,4 @@ The application exposes the following endpoints:
     "errorCount": 0,
     "messageWithUrlCount": 0
 }
-- ```
-## License
-This project uses the following license: [MIT License](<link>).
+ ```
