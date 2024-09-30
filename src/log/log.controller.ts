@@ -36,8 +36,9 @@ export class LogController {
   @Get('report')
   async generateReport(
     @Body(new ValidationPipe()) reportRequest: ReportingRequest,
+    @Request() req,
   ): Promise<ReportingResponse> {
     const { startDate, endDate } = reportRequest;
-    return this.logService.generateReport(startDate, endDate);
+    return this.logService.generateReport(req.user.id, startDate, endDate);
   }
 }

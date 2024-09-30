@@ -4,11 +4,14 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Log } from './models/log.model';
 import { ReportingResponse } from './dto/reporting.dto';
 import { Op } from 'sequelize';
-import { OnEvent } from '@nestjs/event-emitter';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
 export class LogService {
-  constructor(@InjectModel(Log) private logModel: typeof Log) {}
+  constructor(
+    @InjectModel(Log) private logModel: typeof Log,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
   async storeLogs(userId: number, logMessages: SendLogRequest): Promise<Log[]> {
     return await Promise.all(
@@ -28,6 +31,7 @@ export class LogService {
   }
 
   async generateReport(
+    userId: number,
     startDate?: string,
     endDate?: string,
   ): Promise<ReportingResponse> {
@@ -73,6 +77,17 @@ export class LogService {
         ...whereClause,
         containsLocalhostUrls: true,
       },
+    });
+
+    this.eventEmitter.emit('user.events', {
+      userId,
+      logs: [
+        {
+          timestamp: new Date().toISOString(),
+          level: 'info',
+          text: `user with id ${userId} queried logs report`,
+        },
+      ],
     });
 
     return {

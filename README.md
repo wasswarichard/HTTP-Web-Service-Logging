@@ -24,7 +24,7 @@ cd HTTP-Web-Service-Logging
 ```
 create a .env file and update the environment variables
 ```bash
-DATABASE_HOST=
+DATABASE_HOST=postgres // this is the container database host
 DATABASE_PORT=
 DATABASE_USERNAME=
 DATABASE_PASSWORD=
