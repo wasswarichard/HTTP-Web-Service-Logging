@@ -52,7 +52,7 @@ Backend:
 The application exposes the following endpoints:
 
 - `POST /users/register`: Register a new user.
-### Request
+#### Request
 ```bash
 {
     "email": "johndoe@gmail.com",
@@ -60,7 +60,7 @@ The application exposes the following endpoints:
     "role": "ADMIN" //optional enum value (ADMIN, USER)
 }
 ```
-### Response
+#### Response
 ```bash
 {
     "message": "User registered successfully",
@@ -83,7 +83,7 @@ The application exposes the following endpoints:
 }
 ```
 - `GET /logs`: Returns a list of the logs.
-### Response
+#### Response
 ```bash
 {
     "infoCount": 11,
