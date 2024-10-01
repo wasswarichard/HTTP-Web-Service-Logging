@@ -2,7 +2,7 @@
 
 ## Libraries/Frameworks used
 
-- **Backend** : Nestjs, TypeScript, Sequelize, Jest, SuperTest, Postgres
+- **Backend** : Nodejs, Nestjs, TypeScript, Sequelize, Jest, SuperTest, Postgres
 
 ## Design decisions
 ### Backend
@@ -57,7 +57,7 @@ Backend:
 
 The application exposes the following endpoints:
 
-- `POST /users/register`: Register a new user.
+- `POST /api/users/register`: Register a new user.
 #### Request
 ```bash
 {
@@ -73,7 +73,7 @@ The application exposes the following endpoints:
     "userId": 5
 }
 ```
-- `POST /users/login`: Authenticate a user and return access token.
+- `POST /api/users/login`: Authenticate a user and return access token.
 #### Request
 ```bash
 {
@@ -88,7 +88,7 @@ The application exposes the following endpoints:
     "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5kb2VAZ21haWwuY29tIiwic3ViIjo0LCJpYXQiOjE3Mjc2OTQ1ODh9.c4n0TX77zAj2Svohy3RRho9rEnTzlYKzRzz__YQeEQM"
 }
 ```
-- `GET /logs`: Returns a list of the logs.
+- `GET /api/logs/report`: Returns a list of the logs.
 #### Response
 ```bash
 {
