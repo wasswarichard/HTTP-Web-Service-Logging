@@ -32,8 +32,14 @@ DATABASE_NAME=
 JWT_SECRET=
 ```
 Inside the repository run
+#### option 1
 ```bash
 docker-compose up --build
+```
+#### option 2
+```bash
+npm install
+npm run start
 ```
 
 The Backend server will start on
