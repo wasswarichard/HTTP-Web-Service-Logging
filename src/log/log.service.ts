@@ -122,4 +122,34 @@ export class LogService {
   handleUserEvents({ userId, logs }: { userId: number; logs: SendLogRequest }) {
     this.storeLogs(userId, logs);
   }
+
+  async findAll(
+    page: number,
+    limit: number,
+    sortBy: string,
+    sortDirection: 'ASC' | 'DESC',
+  ) {
+    const offset = (page - 1) * limit;
+
+    // Default sorting is by timestamp and level
+    const validSortFields = ['timestamp', 'level'];
+    if (!validSortFields.includes(sortBy)) {
+      throw new BadRequestException(
+        `Invalid sortBy field. Must be one of: ${validSortFields.join(', ')}`,
+      );
+    }
+    const { rows: logs, count: totalLogs } =
+      await this.logModel.findAndCountAll({
+        offset,
+        limit,
+        order: [[sortBy, sortDirection]],
+      });
+    const totalPages = Math.ceil(totalLogs / limit);
+    return {
+      totalLogs,
+      totalPages,
+      currentPage: page,
+      logs,
+    };
+  }
 }

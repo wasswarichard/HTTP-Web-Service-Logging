@@ -6,6 +6,7 @@ import {
   UseGuards,
   ValidationPipe,
   Get,
+  Query,
 } from '@nestjs/common';
 import { LogService } from './log.service';
 import { SendLogRequestDto } from './dto/log.dto';
@@ -14,6 +15,7 @@ import { ReportingRequest, ReportingResponse } from './dto/reporting.dto';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RoleTypeEnum } from '../auth/role.constant';
+import { Log } from './models/log.model';
 
 @Controller('logs')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -40,5 +42,21 @@ export class LogController {
   ): Promise<ReportingResponse> {
     const { startDate, endDate } = reportRequest;
     return this.logService.generateReport(req.user.id, startDate, endDate);
+  }
+
+  @Roles(RoleTypeEnum.ADMIN)
+  @Get()
+  findAll(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('sortBy') sortBy: string = 'timestamp',
+    @Query('sortDirection') sortDirection: 'ASC' | 'DESC' = 'DESC',
+  ): Promise<{
+    totalLogs: number;
+    totalPages: number;
+    currentPage: number;
+    logs: Log[];
+  }> {
+    return this.logService.findAll(page, limit, sortBy, sortDirection);
   }
 }

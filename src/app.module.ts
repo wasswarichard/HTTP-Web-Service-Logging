@@ -19,7 +19,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
       database: process.env.DATABASE_NAME,
       autoLoadModels: true,
       synchronize: true,
-      logging: false,
+      // logging: false,
     }),
     EventEmitterModule.forRoot(),
     UsersModule,
