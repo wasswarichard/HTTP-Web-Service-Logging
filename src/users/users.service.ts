@@ -13,6 +13,7 @@ import { AuthService } from '../auth/auth.service';
 import { RegistrationRequestDto } from './dto/registration-request.dto';
 import { AuthenticationRequestDto } from './dto/authentication-request.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Sequelize } from 'sequelize-typescript';
 
 @Injectable()
 export class UsersService {
@@ -20,34 +21,42 @@ export class UsersService {
     @InjectModel(User) private UserModel: typeof User,
     @Inject(forwardRef(() => AuthService)) private authService: AuthService,
     private readonly eventEmitter: EventEmitter2,
+    private readonly sequelize: Sequelize,
   ) {}
 
   async register(registrationRequestDto: RegistrationRequestDto) {
     const { email, password } = registrationRequestDto;
 
-    // check if user with email already exists
-    const existingUser = await this.findByEmail(email);
-    if (existingUser) {
-      throw new BadRequestException(`Email ${email} already exists`);
+    const t = await this.sequelize.transaction();
+
+    try {
+      // check if user with email already exists
+      await this.findByEmail(email);
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const user = await this.UserModel.create({
+        ...registrationRequestDto,
+        password: hashedPassword,
+      });
+
+      this.eventEmitter.emit('user.events', {
+        userId: user.id,
+        logs: [
+          {
+            timestamp: new Date().toISOString(),
+            level: 'info',
+            text: `User with ${user.email} has been created`,
+          },
+        ],
+      });
+      await t.commit();
+      return { message: 'User registered successfully', userId: user.id };
+    } catch (error) {
+      await t.rollback();
+      throw new BadRequestException(
+        `User registration failed: ${error.message}`,
+      );
     }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await this.UserModel.create({
-      ...registrationRequestDto,
-      password: hashedPassword,
-    });
-
-    this.eventEmitter.emit('user.events', {
-      userId: user.id,
-      logs: [
-        {
-          timestamp: new Date().toISOString(),
-          level: 'info',
-          text: `User with ${user.email} has been created`,
-        },
-      ],
-    });
-    return { message: 'User registered successfully', userId: user.id };
   }
 
   async findByEmail(email: string): Promise<User> {
