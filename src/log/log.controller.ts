@@ -51,12 +51,19 @@ export class LogController {
     @Query('limit') limit: number = 10,
     @Query('sortBy') sortBy: string = 'timestamp',
     @Query('sortDirection') sortDirection: 'ASC' | 'DESC' = 'DESC',
+    @Request() req,
   ): Promise<{
     totalLogs: number;
     totalPages: number;
     currentPage: number;
     logs: Log[];
   }> {
-    return this.logService.findAll(page, limit, sortBy, sortDirection);
+    return this.logService.findAll(
+      req.user.id,
+      page,
+      limit,
+      sortBy,
+      sortDirection,
+    );
   }
 }

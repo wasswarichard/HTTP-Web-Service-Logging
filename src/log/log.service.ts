@@ -124,6 +124,7 @@ export class LogService {
   }
 
   async findAll(
+    userId: number,
     page: number,
     limit: number,
     sortBy: string,
@@ -132,7 +133,7 @@ export class LogService {
     const offset = (page - 1) * limit;
 
     // Default sorting is by timestamp and level
-    const validSortFields = ['timestamp', 'level'];
+    const validSortFields = ['timestamp', 'level', 'createdAt'];
     if (!validSortFields.includes(sortBy)) {
       throw new BadRequestException(
         `Invalid sortBy field. Must be one of: ${validSortFields.join(', ')}`,
@@ -145,6 +146,17 @@ export class LogService {
         order: [[sortBy, sortDirection]],
       });
     const totalPages = Math.ceil(totalLogs / limit);
+
+    this.eventEmitter.emit('user.events', {
+      userId,
+      logs: [
+        {
+          timestamp: new Date().toISOString(),
+          level: 'info',
+          text: `user with id ${userId} queried all logs`,
+        },
+      ],
+    });
     return {
       totalLogs,
       totalPages,
